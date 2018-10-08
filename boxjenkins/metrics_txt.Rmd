@@ -1,0 +1,151 @@
+---
+title: "metrics_txt"
+author: "kasianova"
+date: "12 June 2018"
+output: html_document
+---
+
+```{r}
+library(lmtest)
+library(dplyr)
+library(broom)
+library(ggplot2)
+library(forecast)
+library(strucchange)
+library(tseries)
+library(readxl)
+library(sophisthse)
+library(urca)
+library(uroot)
+```
+
+
+
+```{r}
+gdp1 <- sophisthse("GDP_Q_I")
+gdp2 <- sophisthse("GDPEA_Q")
+gdp <-  ts(data = c(gdp1[1:36, "GDP_Q_DIRI"], gdp2[1:61, "GDPEA_Q_DIRI"]), start = c(1994,1), frequency = 4 ) 
+ggtsdisplay(gdp) 
+```
+```{r}
+ggseasonplot(gdp)  
+
+```
+
+
+```{r}
+ch.test(gdp)
+```
+
+
+
+```{r}
+ur.df(gdp)
+summary(ur.df(gdp))
+```
+
+
+
+
+
+```{r}
+gdp_diff <- diff(gdp,4)
+ggtsdisplay(gdp_diff)
+```
+```{r}
+model_gdp <- Arima(gdp, order = c(2,0,0), seasonal = c(0,1,0),  include.drift=T, include.constant = T, method = "ML")
+summary(model_gdp)
+checkresiduals(model_gdp)
+future <- forecast(model_gdp, h = 8)
+autoplot(future)
+
+```
+
+
+
+```{r}
+amodel_gdp <- auto.arima(gdp)
+summary(amodel_gdp)
+checkresiduals(amodel_gdp)
+afuture <- forecast(amodel_gdp, h = 24)
+autoplot(afuture)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+inv1 <- sophisthse("INVFC_M") #investment in K monthly
+inv <- inv1[, "INVFC_M"]
+ggtsdisplay(inv) 
+```
+
+```{r}
+ggseasonplot(inv) 
+```
+
+
+
+
+```{r}
+ch.test(inv)
+```
+
+
+
+```{r}
+ur.df(inv)
+summary(ur.df(inv))
+```
+
+
+
+
+```{r}
+inv_diff <- diff(gdp,4)
+ggtsdisplay(gdp_diff)
+```
+```{r}
+model_gdp <- Arima(gdp, order = c(2,0,0), seasonal = c(0,1,0),  include.drift=T, include.constant = T, method = "ML")
+summary(model_gdp)
+checkresiduals(model_gdp)
+future <- forecast(model_gdp, h = 8)
+autoplot(future)
+
+```
+
+
+
+```{r}
+amodel_gdp <- auto.arima(gdp)
+summary(amodel_gdp)
+checkresiduals(amodel_gdp)
+afuture <- forecast(amodel_gdp, h = 24)
+autoplot(afuture)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
