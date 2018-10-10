@@ -261,35 +261,48 @@ text = c()
 V_text = c()
 U_text = c()
 
+
+
 while (sum(U) != 0 ) {                                        # while ( UnReachSet ≠ empty )
-    if (sorted[k,1]  %in%  V & sorted[k,2]  %in%  U    ) {       #  x ∈ ReachSet   and  y  ∈ UnReachSet   and e has smallest cost
+    if ((sorted[k,1]  %in%  V & sorted[k,2]  %in%  U) | (sorted[k,2]  %in%  V & sorted[k,1]  %in%  U)     ) {       #  x ∈ ReachSet   and  y  ∈ UnReachSet   and e has smallest cost
+      
       T =   c(T, sorted[k, ])                       # SpanningTree = SpanningTree ∪ {e};
-      V = c(V, sorted[k,2])                                              # ReachSet   = ReachSet ∪ {y};
-      U = U [! U %in% V]                          #   UnReachSet = UnReachSet - {y};
+      
+      if(sorted[k,1]  %in%  V & sorted[k,2]  %in%  U){
+        V = c(V, sorted[k,2])                                              # ReachSet   = ReachSet ∪ {y};
+        U = U [! U %in% V]                          #   UnReachSet = UnReachSet - {y};
+        T_text = c(T_text,  "(",      sorted[k,1], ", " ,  sorted[k,2], ", ", sorted[k,3], "), " )
+        
+        }else{ 
+          V = c(V, sorted[k,1])                                              # ReachSet   = ReachSet ∪ {y};
+          U = U [! U %in% V]                          #   UnReachSet = UnReachSet - {y};
+          T_text = c(T_text,  "(",      sorted[k,2], ", " ,  sorted[k,1], ", ", sorted[k,3], "), " )
+          }
+      
       i = i+1 
       
       for (j in 1:length(V))  {
-      V_text = c(V_text, V[j], ", ") 
+        V_text = c(V_text, V[j], ", ") 
       }
       
       for (j in 1:length(U))  {
         U_text = c(U_text, U[j], ", ") 
       }
       
-      T_text = c(T_text,  "(",      sorted[k,1], ", " ,  sorted[k,2], ", ", sorted[k,3], "), " )
       
       text = c(text, "\n\n Шаг  ",  i,   "\n\n  Находим ребро с минимальным   весом, смежное  с ребрами  дерева $T$:  \n\n  Минимальный элемент: $(",                 sorted[k,1], ", " ,  sorted[k,2], ", ", sorted[k,3], ")$  \n\n  Добавляем  конечную вершину ребра в множество пройденных вершин $V$ и удаляем ее из множества непройденных вершин $U$:  \n\n  " ,                  "$V = пскобка" , V_text,    "лскобка$  \n\n     $U = пскобка", U_text,   "лскобка$   \n\n      Добавляем ребро в множество  $T$:  $T = пскобка ",  T_text, "лскобка$   \n\n  " ) 
       
-        sorted = sorted[-k, ] 
+      sorted = sorted[-k, ] 
       
-        k = 1
-        V_text = c()
-        U_text = c()
-    } else {
-          k = k+1
-          }
-}
-
+      k = 1
+      
+      V_text = c()
+      U_text = c()
+      } else {
+        k = k+1
+      }
+  }
+  
 print(T)
 
 ttt = matrix(T, ncol = 3,  byrow = TRUE) 
