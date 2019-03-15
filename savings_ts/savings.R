@@ -46,5 +46,35 @@ cor(my_df[2:8])
 clean_df <- data.frame(diff(sav), diff(gdp), diff(spen), diff(inc), diff(wage), cpi[2:95], diff(exp)) 
 cor(clean_df)
 
+dflist <- c("spen", "inc", "wage", "cpi", "exp")
+
+adf_list = list()
+k=1
+
+for (i in dflist){
+  v <-get(i)
+  adf_stat <- c()
+  adf_stat <- c(ur.df(v)@teststat[1], ur.df(v)@cval[1], ur.df(v)@cval[2],ur.df(v)@cval[3])
+  adf_list[[k]] <- adf_stat
+  k <- k+1
+}
+
+for (i in dflist){
+  v <-get(i)
+  adf_stat <- c()
+  adf_stat <- c(ur.df(diff(v))@teststat[1], ur.df(diff(v))@cval[1], ur.df(diff(v))@cval[2],ur.df(diff(v))@cval[3])
+  adf_list[[k]] <- adf_stat
+  k <- k+1
+}
+
+df_adf <- data.frame(matrix(unlist(adf_list), nrow=length(adf_list), byrow=T))
+
+summary(ur.df(diff(sav)))
+a <-  ur.df(diff(sav))
+a@testreg$coefficients[1,4]
+ur.df(sav)@teststat[1]
+ur.df(sav)@cval[1]
+
+
 
 
