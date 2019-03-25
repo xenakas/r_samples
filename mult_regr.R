@@ -63,7 +63,7 @@ plot(resid(Model))
 qqPlot(Model, labels = row.names(states), simulate = TRUE, main = 'Q-Q')
 
 
-
+    
 
 
 

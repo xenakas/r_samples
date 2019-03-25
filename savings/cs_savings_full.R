@@ -3,7 +3,7 @@ library(lmtest)
 library(reticulate)
 library(normtest)
 
-my_df <- read.csv(file="savings.csv", header=TRUE, sep=",")
+my_df <- read.csv(file="cs_savings.csv", header=TRUE, sep=",")
 
 boxplot(my_df[1:4])
 boxplot(my_df[c(5,6,11,12,13)])
